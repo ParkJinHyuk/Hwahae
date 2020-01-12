@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.example.hwahae.R
 import com.example.hwahae.base.BaseActivity
 import com.example.hwahae.model.Cosmetics
+import com.example.hwahae.model.CosmeticsList
 import com.example.hwahae.presenter.Contract
 import com.example.hwahae.presenter.HwahaePresenter
 import kotlinx.android.synthetic.main.hwahae.*
@@ -21,22 +22,24 @@ class HwahaeActivity : BaseActivity(), Contract.View {
 
         // 클릭 이벤트 추가 (presenter에게 notify)
         // ex) click -> presenter.getCosmeticList
-        buttonTest.setOnClickListener {
-            
-        }
 
-
+        //목록 가져오기
         hwahaePresenter.getCosmeticsList()
 
-
+        //검색 이벤트
+        buttonTest.setOnClickListener {
+            val keyword = search.text.toString()
+            hwahaePresenter.searchCosmeticsList(keyword)
+        }
     }
 
     override fun initPresenter() {
         hwahaePresenter = HwahaePresenter()
     }
 
-    override fun showCosmeticsList(cosmeticsList: List<Cosmetics>) {
-        //
+    override fun showCosmeticsList(cosmeticsList: CosmeticsList) {
+        val title = cosmeticsList.body[0].title
+        textView4.setText("제목 : $title")
     }
 
     override fun showError(error: String) {

@@ -1,6 +1,10 @@
 package com.example.hwahae.presenter
 
-import com.example.hwahae.model.CosmeticsListData
+import com.example.hwahae.model.CosmeticsList
+import com.example.hwahae.model.SearchRetrofit
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HwahaePresenter : Contract.Presenter {
 
@@ -10,19 +14,34 @@ class HwahaePresenter : Contract.Presenter {
         hwahaeView = view
     }
 
-    override fun getCosmeticsList() {
-        val cosmeticsList = CosmeticsListData.getCosmeticslistData()
-        // 모델로부터 데이터를 받음, 여기서 로직 및 처리?
-
-
-
-
-
-        hwahaeView?.showCosmeticsList(cosmeticsList)
-        // 받은 데이터를 View에게 전달
-    }
-
     override fun dropView() {
         hwahaeView = null
+    }
+
+    override fun getCosmeticsList() {
+        // 모델로부터 데이터를 받음
+        SearchRetrofit.getService().getCosmetics(skin_type = "oily", page = 1).enqueue(object : Callback<CosmeticsList> {
+            override fun onResponse(call: Call<CosmeticsList>, response: Response<CosmeticsList>) {
+                val data = response.body()
+                if (data != null) {
+                    hwahaeView?.showCosmeticsList(data)
+                }
+            }
+            override fun onFailure(call: Call<CosmeticsList>, t: Throwable) {
+            }
+        })
+    }
+
+    override fun searchCosmeticsList(keyword: String) {
+        SearchRetrofit.getService().searchCosmetics(skin_type = "oily", page = 1, search = keyword).enqueue(object : Callback<CosmeticsList> {
+            override fun onResponse(call: Call<CosmeticsList>, response: Response<CosmeticsList>) {
+                val data = response.body()
+                if (data != null) {
+                    hwahaeView?.showCosmeticsList(data)
+                }
+            }
+            override fun onFailure(call: Call<CosmeticsList>, t: Throwable) {
+            }
+        })
     }
 }
