@@ -1,7 +1,10 @@
 package com.example.hwahae.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.hwahae.R
 import com.example.hwahae.base.BaseActivity
 import com.example.hwahae.model.Cosmetics
@@ -13,23 +16,52 @@ import kotlinx.android.synthetic.main.hwahae.*
 class HwahaeActivity : BaseActivity(), Contract.View {
 
     private lateinit var hwahaePresenter: HwahaePresenter
+    private var skin = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.hwahae)
 
         hwahaePresenter.takeView(this)
+        //hwahaePresenter.getCosmeticsList()
 
-        // 클릭 이벤트 추가 (presenter에게 notify)
-        // ex) click -> presenter.getCosmeticList
+        val skinType = resources.getStringArray(R.array.skin_type)
+        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, skinType)
+        spinner.adapter = spinnerAdapter
 
-        //목록 가져오기
-        hwahaePresenter.getCosmeticsList()
+
+        //스피너 이벤트
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
+                when (position) {
+                    0 -> {
+                        //
+                    }
+                    1 -> {
+                        skin = "oily"
+                    }
+                    2 -> {
+                        skin = "dry"
+                    }
+                    3 -> {
+                        skin = "sensitive"
+                    }
+                }
+                hwahaePresenter.getCosmeticsList(skin)
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
 
         //검색 이벤트
-        buttonTest.setOnClickListener {
+        button5.setOnClickListener {
             val keyword = search.text.toString()
-            hwahaePresenter.searchCosmeticsList(keyword)
+            hwahaePresenter.searchCosmeticsList(keyword, skin)
         }
     }
 
@@ -38,11 +70,14 @@ class HwahaeActivity : BaseActivity(), Contract.View {
     }
 
     override fun showCosmeticsList(cosmeticsList: CosmeticsList) {
-        val title = cosmeticsList.body[0].title
-        textView4.setText("제목 : $title")
+        val mAdapter = MainAdapter(this, cosmeticsList)
+        recyclerView.adapter = mAdapter
+
+        val lm = GridLayoutManager(this, 2)
+        recyclerView.layoutManager = lm
+        recyclerView.setHasFixedSize(true)
     }
 
-    override fun showError(error: String) {
 
-    }
+    override fun showError(error: String) {}
 }

@@ -13,7 +13,7 @@ interface RetrofitService {
     ): Call<CosmeticsList>
 
     @GET("products")
-    fun searchCosmetics(
+    fun getCosmetics(
         @Query("skin_type") skin_type: String = "oily",
         @Query("page") page: Int = 1,
         @Query("search") search: String

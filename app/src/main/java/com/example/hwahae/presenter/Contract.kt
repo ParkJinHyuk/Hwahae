@@ -11,8 +11,8 @@ interface Contract {
     }
 
     interface Presenter : BasePresenter<View> {
-        fun getCosmeticsList()
-        fun searchCosmeticsList(keyword: String)
+        fun getCosmeticsList(skinType : String)
+        fun searchCosmeticsList(keyword: String, skinType : String)
     }
 
 }

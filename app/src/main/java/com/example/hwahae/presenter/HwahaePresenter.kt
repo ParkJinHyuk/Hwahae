@@ -1,5 +1,6 @@
 package com.example.hwahae.presenter
 
+import android.widget.ArrayAdapter
 import com.example.hwahae.model.CosmeticsList
 import com.example.hwahae.model.SearchRetrofit
 import retrofit2.Call
@@ -18,9 +19,8 @@ class HwahaePresenter : Contract.Presenter {
         hwahaeView = null
     }
 
-    override fun getCosmeticsList() {
-        // 모델로부터 데이터를 받음
-        SearchRetrofit.getService().getCosmetics(skin_type = "oily", page = 1).enqueue(object : Callback<CosmeticsList> {
+    override fun getCosmeticsList(skinType : String) {
+        SearchRetrofit.getService().getCosmetics(skin_type = skinType, page = 1).enqueue(object : Callback<CosmeticsList> {
             override fun onResponse(call: Call<CosmeticsList>, response: Response<CosmeticsList>) {
                 val data = response.body()
                 if (data != null) {
@@ -32,8 +32,8 @@ class HwahaePresenter : Contract.Presenter {
         })
     }
 
-    override fun searchCosmeticsList(keyword: String) {
-        SearchRetrofit.getService().searchCosmetics(skin_type = "oily", page = 1, search = keyword).enqueue(object : Callback<CosmeticsList> {
+    override fun searchCosmeticsList(keyword: String, skinType: String) {
+        SearchRetrofit.getService().getCosmetics(skin_type = skinType, page = 1, search = keyword).enqueue(object : Callback<CosmeticsList> {
             override fun onResponse(call: Call<CosmeticsList>, response: Response<CosmeticsList>) {
                 val data = response.body()
                 if (data != null) {
