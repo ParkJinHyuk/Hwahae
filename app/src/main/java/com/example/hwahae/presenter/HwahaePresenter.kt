@@ -1,8 +1,6 @@
 package com.example.hwahae.presenter
 
-import android.widget.ArrayAdapter
-import com.example.hwahae.model.CosmeticsList
-import com.example.hwahae.model.SearchRetrofit
+import com.example.hwahae.model.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,6 +39,19 @@ class HwahaePresenter : Contract.Presenter {
                 }
             }
             override fun onFailure(call: Call<CosmeticsList>, t: Throwable) {
+            }
+        })
+    }
+
+    fun getCosmeticsDetail(id: String) {
+        SearchRetrofit.getService().getCosmeticsDetail(id = id).enqueue(object : Callback<CosmeticsDetailList> {
+            override fun onResponse(call: Call<CosmeticsDetailList>, response: Response<CosmeticsDetailList>) {
+                val data = response.body()
+                if (data != null) {
+                    hwahaeView?.showCosmeticsDetail(data)
+                }
+            }
+            override fun onFailure(call: Call<CosmeticsDetailList>, t: Throwable) {
             }
         })
     }

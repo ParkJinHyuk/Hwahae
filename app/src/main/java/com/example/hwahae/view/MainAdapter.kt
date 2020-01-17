@@ -12,11 +12,12 @@ import com.example.hwahae.R
 import com.example.hwahae.model.Cosmetics
 import com.example.hwahae.model.CosmeticsList
 
-class MainAdapter(val context: Context, val cosmeticsList: CosmeticsList): RecyclerView.Adapter<MainAdapter.Holder>() {
+
+class MainAdapter(val context: Context, val cosmeticsList: CosmeticsList, val itemClick: (Cosmetics) -> Unit): RecyclerView.Adapter<MainAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view = LayoutInflater.from(context).inflate(R.layout.cosmetics, parent, false)
-        return Holder(view)
+        return Holder(view, itemClick)
     }
     override fun getItemCount(): Int {
         return cosmeticsList.body.size;
@@ -26,7 +27,7 @@ class MainAdapter(val context: Context, val cosmeticsList: CosmeticsList): Recyc
     }
 
 
-    inner class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class Holder(itemView: View, itemClick: (Cosmetics) -> Unit) : RecyclerView.ViewHolder(itemView) {
 
         val cosmeticsImage = itemView.findViewById<ImageView>(R.id.iv_image)
         val cosmeticsTitle = itemView.findViewById<TextView>(R.id.tv_title)
@@ -38,6 +39,8 @@ class MainAdapter(val context: Context, val cosmeticsList: CosmeticsList): Recyc
                 .into(cosmeticsImage)
             cosmeticsTitle.text= cosmetics.title
             cosmeticsPrice.text = (cosmetics.price).toString()
+
+            itemView.setOnClickListener { itemClick(cosmetics) }
         }
     }
 }

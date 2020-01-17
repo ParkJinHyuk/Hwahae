@@ -2,6 +2,7 @@ package com.example.hwahae.model
 
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface RetrofitService {
@@ -18,5 +19,10 @@ interface RetrofitService {
         @Query("page") page: Int = 1,
         @Query("search") search: String
     ): Call<CosmeticsList>
+
+    @GET("products/{id}")
+    fun getCosmeticsDetail(
+        @Path("id") id: String
+    ): Call<CosmeticsDetailList>
 
 }

@@ -1,5 +1,6 @@
 package com.example.hwahae.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -7,8 +8,7 @@ import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.hwahae.R
 import com.example.hwahae.base.BaseActivity
-import com.example.hwahae.model.Cosmetics
-import com.example.hwahae.model.CosmeticsList
+import com.example.hwahae.model.*
 import com.example.hwahae.presenter.Contract
 import com.example.hwahae.presenter.HwahaePresenter
 import kotlinx.android.synthetic.main.hwahae.*
@@ -70,7 +70,11 @@ class HwahaeActivity : BaseActivity(), Contract.View {
     }
 
     override fun showCosmeticsList(cosmeticsList: CosmeticsList) {
-        val mAdapter = MainAdapter(this, cosmeticsList)
+        val mAdapter = MainAdapter(this, cosmeticsList) {cosmetics ->
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra("KEY", cosmetics.id.toString())
+            startActivity(intent)
+        }
         recyclerView.adapter = mAdapter
 
         val lm = GridLayoutManager(this, 2)
@@ -80,4 +84,6 @@ class HwahaeActivity : BaseActivity(), Contract.View {
 
 
     override fun showError(error: String) {}
+
+    override fun showCosmeticsDetail(cosmeticsDetailList: CosmeticsDetailList) {}
 }
