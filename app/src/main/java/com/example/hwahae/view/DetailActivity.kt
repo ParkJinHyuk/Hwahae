@@ -33,6 +33,10 @@ class DetailActivity : BaseActivity(), Contract.View {
         var id = intent.getStringExtra("KEY")
         if(id != null)
             detailPresenter.getCosmeticsDetail(id)
+
+        backButton.setOnClickListener{
+            onBackPressed()
+        }
     }
 
     override fun showCosmeticsDetail(cosmeticsDetailList: CosmeticsDetailList) {
